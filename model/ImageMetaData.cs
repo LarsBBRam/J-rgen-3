@@ -10,13 +10,13 @@ public class ImageMetadata
     public string? Format { get; set; }
 
     // EXIF-data goes here
-
     public string? CameraMake { get; set; }
     public string? CameraModel { get; set; }
 
-    public DateTime DateTaken { get; set; }
+    public string? DateTaken { get; set; }
 
     public string? GPSLatitude { get; set; }
 
     public string? GPSLongitude { get; set; }
+
 }

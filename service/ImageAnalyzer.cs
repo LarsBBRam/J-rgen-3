@@ -29,22 +29,30 @@ public class ImageAnalyzer
 
         metaData.CameraMake = ifd0?.GetDescription(ExifDirectoryBase.TagMake);
         metaData.CameraModel = ifd0?.GetDescription(ExifDirectoryBase.TagModel);
-        var dateTime = subIfdDirectory.GetDescription(ExifDirectoryBase.TagDateTime);
+        // var dateTime = subIfdDirectory.GetDescription(ExifDirectoryBase.TagDateTime);
 
-        if (string.IsNullOrWhiteSpace(dateTime))
-            throw new Exception("An error occured!");
+        metaData.DateTaken = ifd0?.GetDescription(ExifDirectoryBase.TagDateTime);
+        // if (string.IsNullOrWhiteSpace(dateTime))
+        //     throw new Exception("An error occured!");
 
-        var parseDateTime = DateTime.Parse(dateTime);
+        // var parseDateTime = DateTime.Parse(dateTime);
 
-        metaData.DateTaken = parseDateTime.ToUniversalTime();
+        // metaData.DateTaken = parseDateTime.ToLocalTime();
 
-        var location = metaData.GPSLatitude + metaData.GPSLongitude;
+
+        var location = GPS?.GetGeoLocation();
 
         if (GPS != null)
         {
-            metaData.GPSLongitude = GPS.GetGeoLocation().Longitude.ToString();
-            metaData.GPSLatitude = GPS.GetGeoLocation().Latitude.ToString();
+            metaData.GPSLongitude = location.Latitude.ToString();
+            metaData.GPSLatitude = location.Longitude.ToString();
         }
+        else if (GPS != null && GPS.GetGeoLocation() == null)
+        {
+            metaData.GPSLatitude = "0";
+            metaData.GPSLongitude = "0";
+        }
+
         return metaData;
     }
 }
